@@ -1,3 +1,5 @@
 *.wav
 *.jpg
 *.png
+/tf_gpu_env
+/yamnet_env
