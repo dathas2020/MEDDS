@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MEDDS Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="header">
+    <h1>MEDDS</h1>
+    <p>Multimodal Emotion & Distraction Detection System</p>
+    
+    <div class="status-bar">
+
+        <div class="status-item" id="cameraStatus">
+            🔴 Camera Disconnected
+        </div>
+
+        <div class="status-item" id="micStatus">
+            🔴 Microphone Disconnected
+        </div>
+
+        <div class="status-item" id="faceModelStatus">
+            🟡 Face Model Not Loaded
+        </div>
+
+        <div class="status-item" id="voiceModelStatus">
+            🟡 Voice Model Not Loaded
+        </div>
+
+        <div class="status-item" id="spoofModelStatus">
+            🟡 Spoof Model Not Loaded
+        </div>
+
+    </div>
+
+        <div class="system-info">
+
+        <div id="modelsLoaded">
+            Models Loaded: 0/3
+            <div class="metrics-row">
+
+                <div id="cameraMetric">
+                    Camera: Active
+                </div>
+
+                <div id="micMetric">
+                    Microphone: Active
+                </div>
+
+                <div id="systemMetric">
+                    System: Operational
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="dashboard">
+
+    <div class="camera-card">
+
+        <h2>Live Camera Feed</h2>
+
+        <div class="camera-container">
+            <video id="webcam" autoplay playsinline></video>
+        </div>
+        
+        <div class="audio-panel">
+
+            <div class="mic-header">
+                🎤 Microphone Active
+            </div>
+
+            <canvas id="audioVisualizer"></canvas>
+
+        </div>
+
+    </div>
+
+    <div class="results">
+
+        <div class="card">
+            <h3>😊 Face Emotion</h3>
+            <p id="faceEmotion">Loading...</p>
+        </div>
+
+        <div class="card">
+            <h3>🎤 Voice Emotion</h3>
+
+            <div id="voiceEmotion">
+                Waiting...
+            </div>
+
+            <div id="voiceConfidence">
+                0%
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🛡️ Spoof Detection</h3>
+            <p id="spoofStatus">Loading...</p>
+        </div>
+
+        <div class="card final">
+            <h3>🧠 Final Emotion</h3>
+            <p id="finalEmotion">Loading...</p>
+        </div>
+
+    </div>
+
+</div>
+
+<canvas id="captureCanvas" style="display:none;"></canvas>
+
+</body>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+
+</html>

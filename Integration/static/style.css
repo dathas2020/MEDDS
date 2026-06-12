@@ -1,0 +1,198 @@
+body{
+    margin:0;
+    background:#0f172a;
+    color:white;
+    font-family:Segoe UI, sans-serif;
+}
+
+.header{
+    text-align:center;
+    padding:20px;
+}
+
+.header h1{
+    font-size:48px;
+    margin:10px;
+}
+
+.header p{
+    color:#94a3b8;
+}
+
+.dashboard{
+    width:95%;
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns: 2fr 1fr;
+
+    gap:20px;
+}
+
+.camera-card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:15px;
+}
+
+.camera-placeholder{
+
+    height:500px;
+
+    background:#334155;
+
+    border-radius:15px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:24px;
+}
+
+.results{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.card{
+
+    background:#1e293b;
+
+    border-radius:15px;
+
+    padding:20px;
+
+    text-align:center;
+}
+
+.card h3{
+    margin-bottom:10px;
+}
+
+.card p{
+    font-size:22px;
+}
+
+.final{
+    background:#2563eb;
+}
+
+.camera-container{
+    width:100%;
+    height:500px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    overflow:hidden;
+
+    border-radius:15px;
+
+    background:black;
+}
+
+#webcam{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.audio-panel{
+
+    margin-top:20px;
+
+    background:#0f172a;
+
+    padding:15px;
+
+    border-radius:15px;
+
+}
+
+.mic-header{
+
+    font-size:20px;
+
+    margin-bottom:10px;
+
+    color:#38bdf8;
+
+}
+
+#audioVisualizer{
+
+    width:100%;
+    height:120px;
+
+    background:#020617;
+
+    border-radius:10px;
+}
+
+.status-bar{
+
+    width:95%;
+    margin:20px auto;
+
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.status-item{
+
+    background:#1e293b;
+
+    padding:10px 15px;
+
+    border-radius:10px;
+
+    color:#e2e8f0;
+
+    font-size:14px;
+}
+
+.status-green{
+    background:#166534;
+}
+
+.status-red{
+    background:#991b1b;
+}
+
+.status-yellow{
+    background:#92400e;
+}
+
+.system-info{
+
+    width:95%;
+
+    margin:auto;
+
+    margin-bottom:20px;
+
+    text-align:center;
+
+    color:#cbd5e1;
+
+    font-size:18px;
+}
+
+.metrics-row{
+
+    display:flex;
+    justify-content:center;
+    gap:30px;
+
+    margin-top:10px;
+
+    color:#cbd5e1;
+
+    font-size:16px;
+}
