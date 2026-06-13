@@ -1,5 +1,19 @@
+# Embeddings
+Emotion_Model/Face_Embeddings_Output/*.npy
+Emotion_Model/Voice_Embeddings_Output/*.npy
+Emotion_Model/Fusion_Embeddings/*.npy
+
+# Dataset
 *.wav
 *.jpg
 *.png
-/tf_gpu_env
-/yamnet_env
+uploads/
+
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environments
+.venv/
+yamnet_env/
+tf_gpu_env/
