@@ -13,53 +13,6 @@
 <div class="header">
     <h1>MEDDS</h1>
     <p>Multimodal Emotion & Distraction Detection System</p>
-    
-    <div class="status-bar">
-
-        <div class="status-item" id="cameraStatus">
-            🔴 Camera Disconnected
-        </div>
-
-        <div class="status-item" id="micStatus">
-            🔴 Microphone Disconnected
-        </div>
-
-        <div class="status-item" id="faceModelStatus">
-            🟡 Face Model Not Loaded
-        </div>
-
-        <div class="status-item" id="voiceModelStatus">
-            🟡 Voice Model Not Loaded
-        </div>
-
-        <div class="status-item" id="spoofModelStatus">
-            🟡 Spoof Model Not Loaded
-        </div>
-
-    </div>
-
-        <div class="system-info">
-
-        <div id="modelsLoaded">
-            Models Loaded: 0/3
-            <div class="metrics-row">
-
-                <div id="cameraMetric">
-                    Camera: Active
-                </div>
-
-                <div id="micMetric">
-                    Microphone: Active
-                </div>
-
-                <div id="systemMetric">
-                    System: Operational
-                </div>
-
-            </div>
-        </div>
-
-    </div>
 </div>
 
 <div class="dashboard">
@@ -86,31 +39,52 @@
 
     <div class="results">
 
-        <div class="card">
-            <h3>😊 Face Emotion</h3>
-            <p id="faceEmotion">Loading...</p>
-        </div>
+        <div class="card emotion-card">
 
-        <div class="card">
-            <h3>🎤 Voice Emotion</h3>
+            <h3>🧠 Fusion Emotion</h3>
 
-            <div id="voiceEmotion">
+            <div id="finalEmotion">
                 Waiting...
             </div>
 
-            <div id="voiceConfidence">
+            <div id="finalConfidence">
                 0%
             </div>
+
         </div>
 
         <div class="card">
-            <h3>🛡️ Spoof Detection</h3>
-            <p id="spoofStatus">Loading...</p>
+
+            <h3>📊 Top 3 Emotions</h3>
+
+            <div id="topEmotion1">-</div>
+            <div id="topEmotion2">-</div>
+            <div id="topEmotion3">-</div>
+
         </div>
 
-        <div class="card final">
-            <h3>🧠 Final Emotion</h3>
-            <p id="finalEmotion">Loading...</p>
+        <div class="card">
+
+            <h3>🛡️ Spoof Detection</h3>
+
+            <div id="spoofStatus">
+                Waiting...
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h3>🎯 Distraction</h3>
+
+            <div id="distractionLevel">
+                Waiting...
+            </div>
+
+            <div id="distractionScore">
+                0%
+            </div>
+
         </div>
 
     </div>

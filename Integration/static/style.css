@@ -196,3 +196,78 @@ body{
 
     font-size:16px;
 }
+
+body{
+    background:#0f172a;
+    color:white;
+    font-family:Segoe UI,sans-serif;
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+    gap:20px;
+    padding:20px;
+}
+
+.results{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.card{
+    background:#1e293b;
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 0 15px rgba(0,0,0,.25);
+}
+
+.emotion-card{
+    text-align:center;
+}
+
+#finalEmotion{
+    font-size:48px;
+    font-weight:700;
+    margin-top:10px;
+}
+
+#finalConfidence{
+    font-size:28px;
+    color:#38bdf8;
+    margin-top:10px;
+}
+
+#topEmotion1,
+#topEmotion2,
+#topEmotion3{
+    padding:8px 0;
+    font-size:18px;
+}
+
+#spoofStatus{
+    font-size:24px;
+    font-weight:600;
+}
+
+#distractionLevel{
+    font-size:24px;
+    font-weight:600;
+}
+
+#distractionScore{
+    font-size:22px;
+    color:#38bdf8;
+}
+
+.camera-card{
+    background:#1e293b;
+    border-radius:18px;
+    padding:20px;
+}
+
+video{
+    width:100%;
+    border-radius:15px;
+}

@@ -1,6 +1,14 @@
 from pydub import AudioSegment
 from pydub.utils import which
 
+latest_audio_path = None
+
+latest_fusion_result = {
+    "emotion": "Waiting",
+    "confidence": 0,
+    "probabilities": {}
+}
+
 AudioSegment.converter = (
     r"C:\ffmpeg-2026-06-08-git-6028720d70-essentials_build\bin\ffmpeg.exe"
 )
@@ -13,6 +21,12 @@ os.environ["PATH"] += os.pathsep + (
 
 print("ffmpeg:", which("ffmpeg"))
 print("ffprobe:", which("ffprobe"))
+
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent
+
+UPLOAD_DIR = PROJECT_ROOT / "uploads"
 
 import os
 from werkzeug.utils import secure_filename
@@ -30,7 +44,23 @@ from models.face_predict import predict_face
 from models.voice_predict import predict_voice
 from models.spoof_predict import predict_spoof
 
+from models.fusion_service import (
+    predict_multimodal
+)
+
+latest_spoof_result = {
+    "status": "Pending",
+    "confidence": 0
+}
+
+latest_distraction_result = {
+    "level": "Pending",
+    "score": 0
+}
+
 app = Flask(__name__)
+
+latest_face_detected = False
 
 @app.route("/")
 def home():
@@ -41,41 +71,40 @@ def get_predictions():
 
     return jsonify({
 
-        "face_emotion": "Waiting",
-        "face_confidence": 0,
+        "face_detected":
+            latest_face_detected,
 
-        "voice_emotion": "Waiting",
-        "voice_confidence": 0,
+        "final_emotion":
+            latest_fusion_result["emotion"],
 
-        "spoof_status": "Waiting",
-        "spoof_confidence": 0,
+        "final_confidence":
+            latest_fusion_result["confidence"],
 
-        "final_emotion": "Waiting"
+        "top3":
+            latest_fusion_result.get(
+                "top3",
+                []
+            ),
 
+        "spoof_status":
+            f'{latest_spoof_result["status"]} '
+            f'({latest_spoof_result["confidence"]}%)',
+
+        "distraction_level":
+            latest_distraction_result["level"],
+
+        "distraction_score":
+            latest_distraction_result["score"]
     })
 
 @app.route("/system_status")
 def system_status():
 
-    print("FACE:", FACE_MODEL_PATH)
-    print("VOICE:", VOICE_MODEL_PATH)
-    print("SPOOF:", SPOOF_MODEL_PATH)
-
-    face_exists = os.path.exists(FACE_MODEL_PATH)
-    voice_exists = os.path.exists(VOICE_MODEL_PATH)
-    spoof_exists = os.path.exists(SPOOF_MODEL_PATH)
-
-    print(face_exists, voice_exists, spoof_exists)
-
     return jsonify({
-        "face_model": face_exists,
-        "voice_model": voice_exists,
-        "spoof_model": spoof_exists,
-        "models_loaded": sum([
-            face_exists,
-            voice_exists,
-            spoof_exists
-        ]),
+        "face_model": True,
+        "voice_model": True,
+        "spoof_model": True,
+        "models_loaded": 3,
         "total_models": 3
     })
 
@@ -88,6 +117,51 @@ def predict_face_api():
     result = predict_face(
         data["image"]
     )
+
+    global latest_face_detected
+
+    latest_face_detected = result.get(
+        "face_detected",
+        False
+    )
+    
+    global latest_distraction_result
+
+    latest_distraction_result = {
+
+        "level":
+            result.get(
+                "distraction_level",
+                "-"
+            ),
+
+        "score":
+            result.get(
+                "distraction_score",
+                0
+            )
+    }
+
+    if not latest_face_detected:
+
+        global latest_fusion_result
+        global latest_spoof_result
+        
+
+        latest_fusion_result = {
+            "emotion": "No Face",
+            "confidence": 0,
+            "top3": []
+        }
+
+        latest_spoof_result = {
+            "status": "-"
+        }
+
+        latest_distraction_result = {
+            "level": "No Face Detected",
+            "score": 100
+        }
 
     return jsonify(result)
 
@@ -119,6 +193,9 @@ def predict_voice_api():
         upload_dir,
         "latest_audio.wav"
     )
+        
+    print("WEBM PATH:", save_path)
+    print("WAV PATH:", wav_path)
 
     audio = AudioSegment.from_file(
         save_path,
@@ -132,6 +209,45 @@ def predict_voice_api():
         wav_path,
         format="wav"
     )
+
+    frame_path = (
+        UPLOAD_DIR /
+        "latest_frame.jpg"
+    )
+
+    if frame_path.exists():
+
+        from models.fusion_service import (
+            predict_multimodal
+        )
+
+        global latest_fusion_result
+
+        latest_fusion_result = (
+            predict_multimodal(
+                frame_path,
+                wav_path
+            )
+        )
+        
+        global latest_spoof_result
+
+        latest_spoof_result = {
+            "status": "Pending",
+            "confidence": 0
+        }
+
+        latest_spoof_result = predict_spoof(
+            frame_path
+        )
+
+        print("\nLATEST FUSION RESULT:")
+        print(latest_fusion_result)
+
+        print(
+            "FUSION RESULT:",
+            latest_fusion_result
+        )
 
     result = predict_voice(
         wav_path

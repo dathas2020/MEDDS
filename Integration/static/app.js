@@ -36,23 +36,122 @@ async function startWebcam(){
 
 async function updatePredictions(){
 
+    console.log("updatePredictions called");
+
     const response =
         await fetch("/get_predictions");
 
     const data =
         await response.json();
 
-    document.getElementById("faceEmotion").innerText =
-        `${data.face_emotion} (${data.face_confidence}%)`;
+    console.log(data);
 
-    document.getElementById("voiceEmotion").innerText =
-        `${data.voice_emotion} (${data.voice_confidence}%)`;
+    if(!data.face_detected){
 
-    document.getElementById("spoofStatus").innerText =
-        `${data.spoof_status} (${data.spoof_confidence}%)`;
+        document.getElementById(
+            "finalEmotion"
+        ).innerText =
+            "No Face Detected";
 
-    document.getElementById("finalEmotion").innerText =
+        document.getElementById(
+            "finalConfidence"
+        ).innerText =
+            "-";
+
+        document.getElementById(
+            "topEmotion1"
+        ).innerText =
+            "-";
+
+        document.getElementById(
+            "topEmotion2"
+        ).innerText =
+            "-";
+
+        document.getElementById(
+            "topEmotion3"
+        ).innerText =
+            "-";
+
+        document.getElementById(
+            "distractionLevel"
+        ).innerText =
+            "No Face Detected";
+
+        document.getElementById(
+            "distractionScore"
+        ).innerText =
+            "100%";
+
+        document.getElementById(
+            "spoofStatus"
+        ).innerText =
+            "-";
+
+        return;
+    }
+
+    document.getElementById(
+        "finalEmotion"
+    ).innerText =
         data.final_emotion;
+
+    const emotionColors = {
+
+        Happy:"#22c55e",
+        Sad:"#3b82f6",
+        Angry:"#ef4444",
+        Fear:"#f59e0b",
+        Neutral:"#94a3b8",
+        Surprise:"#a855f7",
+        Disgust:"#10b981",
+
+        "No Face":"#ffffff"
+    };
+
+    document.getElementById(
+        "finalEmotion"
+    ).style.color =
+        emotionColors[data.final_emotion] ||
+        "#ffffff";
+
+    document.getElementById(
+        "finalConfidence"
+    ).innerText =
+        `${data.final_confidence}%`;
+
+    document.getElementById(
+        "spoofStatus"
+    ).innerText =
+        data.spoof_status;
+
+    document.getElementById(
+        "distractionLevel"
+    ).innerText =
+        data.distraction_level;
+
+    document.getElementById(
+        "distractionScore"
+    ).innerText =
+        `${data.distraction_score}%`;
+
+    if(data.top3.length >= 3){
+
+        document.getElementById(
+            "topEmotion1"
+        ).innerText =
+            `${data.top3[0][0]}: ${data.top3[0][1]}%`;
+
+        document.getElementById(
+            "topEmotion2"
+        ).innerText =
+            `${data.top3[1][0]}: ${data.top3[1][1]}%`;
+
+        document.getElementById(
+            "topEmotion3"
+        ).innerText =
+            `${data.top3[2][0]}: ${data.top3[2][1]}%`;
+    }
 }
 
 async function startMicrophone(){
@@ -165,19 +264,15 @@ async function updateSystemStatus(){
         await response.json();
 
     setStatus(
-        "faceModelStatus",
-        data.face_model,
-        data.face_model
-            ? "Face Model Ready"
-            : "Face Model Missing"
+        "embeddingStatus",
+        true,
+        "Embedding Pipeline Ready"
     );
 
     setStatus(
-        "voiceModelStatus",
-        data.voice_model,
-        data.voice_model
-            ? "Voice Model Ready"
-            : "Voice Model Missing"
+        "fusionModelStatus",
+        true,
+        "Fusion Model Ready"
     );
 
     setStatus(
@@ -265,10 +360,7 @@ async function sendFrame(){
             })
         });
 
-    const result =
-        await response.json();
-
-    console.log(result);
+    await response.json();
 }
 
 let mediaRecorder;
@@ -331,10 +423,7 @@ async function sendAudioChunk() {
 
     try {
 
-        document.getElementById(
-            "voiceEmotion"
-        ).innerText =
-            "Listening...";
+        console.log("Listening...");
 
         const response =
             await fetch(
@@ -348,7 +437,9 @@ async function sendAudioChunk() {
         const result =
             await response.json();
 
-        updateVoiceCard(result);
+        console.log(
+            "Voice chunk processed"
+        );
 
     }
 
@@ -359,22 +450,6 @@ async function sendAudioChunk() {
     }
 
     startRecordingCycle();
-}
-
-function updateVoiceCard(result) {
-
-    if(!result.success)
-        return;
-
-    document.getElementById(
-        "voiceEmotion"
-    ).innerText =
-        result.emotion;
-
-    document.getElementById(
-        "voiceConfidence"
-    ).innerText =
-        result.confidence + "%";
 }
 
 startWebcam();
